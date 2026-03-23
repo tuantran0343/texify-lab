@@ -32,15 +32,15 @@ jobs:
       
       # Bước 3: Khôi phục các package NuGet
       - name: Restore dependencies
-        run: dotnet restore TexifyLab.slnx
+        run: dotnet restore ./TexifyLab/TexifyLab.slnx
       
       # Bước 4: Build project
       - name: Build project
-        run: dotnet build TexifyLab.slnx --configuration Release --no-restore
+        run: dotnet build ./TexifyLab/TexifyLab.slnx --configuration Release --no-restore
       
       # Bước 5: Chạy unit tests
       - name: Run unit tests
-        run: dotnet test TexifyLab.slnx --configuration Release --no-build --logger trx
+        run: dotnet test ./TexifyLab/TexifyLab.slnx --configuration Release --no-build --logger trx
       
       # Bước 6: (Tùy chọn) Upload kết quả test để xem sau
       - name: Upload test results
