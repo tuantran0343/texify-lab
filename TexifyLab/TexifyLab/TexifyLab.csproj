@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <PackageId>TexifyLab</PackageId>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>Tuan</Authors>
     <Description>String utilities for TexifyLab</Description>
     <ImplicitUsings>enable</ImplicitUsings>
