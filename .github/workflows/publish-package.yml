@@ -1,0 +1,35 @@
+name: Publish Package
+
+on:
+  workflow_call: # Thêm dòng này để cho phép workflow khác gọi nó
+    secrets:     # Khai báo các secret cần dùng
+      NUGET_API_KEY:
+        required: true
+  pull_request:
+    types: [closed]
+    branches: [ "main"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy package')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      
+      - name: Restore dependencies
+        run: dotnet restore ./TexifyLab/TexifyLab.slnx
+      
+      - name: Pack NuGet package
+        run: dotnet pack ./TexifyLab/TexifyLab.slnx --configuration Release --output ./nupkg
+      
+      - name: Publish to NuGet.org
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
