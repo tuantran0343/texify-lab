@@ -54,10 +54,10 @@ jobs:
           retention-days: 7
 
   publish:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy package')
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.name, 'deploy package')
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
