@@ -53,9 +53,10 @@ jobs:
           retention-days: 7
   
   check-step:
+    needs: build-and-test
     runs-on: ubuntu-latest
     steps:
-      - run: echo "LABEL DATA => ${{ github.event.pull_request.labels.*.name }}"
+      - run: echo "LABEL DATA => ${{ toJson(github.event.pull_request.labels.*.name) }}"
 
   publish-nuget-package:
     if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy package')
