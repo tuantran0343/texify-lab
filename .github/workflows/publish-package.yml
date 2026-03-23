@@ -4,7 +4,12 @@ on:
   workflow_call: # Thêm dòng này để cho phép workflow khác gọi nó
     secrets:     # Khai báo các secret cần dùng
       NUGET_API_KEY:
-        required: true
+        required: true    
+    outputs:
+      publish_result:
+        description: "JSON result of the publish job"
+        value: ${{ jobs.publish.outputs.publish_result }}
+
   pull_request:
     types: [closed]
     branches: [ "main"]
@@ -12,7 +17,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy package')
+    outputs:
+      publish_result: ${{ steps.set-result.outputs.publish_result }}
 
     steps:
       - name: Checkout code
@@ -33,3 +39,15 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Set publish result output
+        id: set-result
+        run: |
+          TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%SZ")
+          JSON_OUTPUT=$(jq -n \
+            --arg jobId "${{ github.run_id }}-${{ github.job }}" \
+            --arg ts "$TIMESTAMP" \
+            --arg desc "publish okay" \
+            '{jobId: $jobId, timestamp: $ts, description: $desc}')
+          
+          echo "publish_result=$JSON_OUTPUT" >> "$GITHUB_OUTPUT"
