@@ -10,8 +10,14 @@ on:
         description: "JSON result of the publish job"
         value: ${{ jobs.publish.outputs.publish_result }}
 
+  pull_request:
+    types:
+      - closed
+    branches: [ "main"]
+
 jobs:
   publish:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy package')
     runs-on: ubuntu-latest
     outputs:
       publish_result: ${{ steps.set-result.outputs.publish_result }}
@@ -45,6 +51,25 @@ jobs:
             --arg jobId "${{ github.run_id }}-${{ github.job }}" \
             --arg ts "$TIMESTAMP" \
             --arg desc "publish okay" \
+            '{jobId: $jobId, timestamp: $ts, description: $desc}')
+
+          echo "publish_result<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$JSON_OUTPUT" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+  fallback-publish:
+    if: github.event.pull_request.merged != true || !contains(github.event.pull_request.labels.*.name, 'deploy package')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set publish result output with fallback
+        id: set-result
+        run: |
+          TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%SZ")
+
+          JSON_OUTPUT=$(jq -n \
+            --arg jobId "${{ github.run_id }}-${{ github.job }}" \
+            --arg ts "$TIMESTAMP" \
+            --arg desc "fallback, no publish" \
             '{jobId: $jobId, timestamp: $ts, description: $desc}')
 
           echo "publish_result<<EOF" >> "$GITHUB_OUTPUT"
