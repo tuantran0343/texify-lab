@@ -3,14 +3,12 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <PackageId>TexifyLab</PackageId>
+    <Version>1.0.0</Version>
     <Authors>Tuan</Authors>
     <Description>String utilities for TexifyLab</Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>
