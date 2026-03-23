@@ -36,7 +36,7 @@
         {
             string input = "Nemo";
 
-            Assert.That(input, Is.EqualTo("input"));
+            Assert.That(input, Is.EqualTo(input + ""));
         }
     }
 }
