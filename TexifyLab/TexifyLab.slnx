@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TexifyLab.UnitTests/TexifyLab.UnitTests.csproj" />
+  <Project Path="TexifyLab/TexifyLab.csproj" />
+</Solution>
