@@ -8,7 +8,7 @@ on:
     outputs:
       publish_result:
         description: "JSON result of the publish job"
-        value: ${{ jobs.publish.outputs.publish_result }}
+        value: ${{ jobs.publish.outputs.publish_result || jobs.fallback-publish.outputs.publish_result }}
 
   pull_request:
     types:
@@ -60,6 +60,8 @@ jobs:
   fallback-publish:
     if: github.event.pull_request.merged != true || !contains(github.event.pull_request.labels.*.name, 'deploy package')
     runs-on: ubuntu-latest
+    outputs:
+      publish_result: ${{ steps.set-result.outputs.publish_result }}
     steps:
       - name: Set publish result output with fallback
         id: set-result
