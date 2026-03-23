@@ -4,7 +4,8 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main", "feat/Update-code"]
+    types: [closed]
+    branches: [ "main"]
   workflow_dispatch:
 
 jobs:
@@ -53,9 +54,10 @@ jobs:
           retention-days: 7
 
   publish:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy package')
     needs: build-and-test
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
