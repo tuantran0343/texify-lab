@@ -10,10 +10,6 @@ on:
         description: "JSON result of the publish job"
         value: ${{ jobs.publish.outputs.publish_result }}
 
-  pull_request:
-    types: [closed]
-    branches: [ "main"]
-
 jobs:
   publish:
     runs-on: ubuntu-latest
