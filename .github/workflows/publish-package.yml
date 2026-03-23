@@ -44,10 +44,13 @@ jobs:
         id: set-result
         run: |
           TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%SZ")
+
           JSON_OUTPUT=$(jq -n \
             --arg jobId "${{ github.run_id }}-${{ github.job }}" \
             --arg ts "$TIMESTAMP" \
             --arg desc "publish okay" \
             '{jobId: $jobId, timestamp: $ts, description: $desc}')
-          
-          echo "publish_result=$JSON_OUTPUT" >> "$GITHUB_OUTPUT"
+
+          echo "publish_result<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$JSON_OUTPUT" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
