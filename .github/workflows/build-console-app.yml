@@ -32,7 +32,7 @@ jobs:
 
       # Bước 3: Publish ra một thư mục riêng để chuẩn bị upload
       - name: Publish App
-        run: dotnet publish ./TexifyLab/ConsoleApp/ConsoleApp.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish-folder
+        run: dotnet publish ./TexifyLab/ConsoleApp/ConsoleApp.csproj -c Release -r win-x64 -o ./publish-folder
         
       # Bước 4: Chỉ upload kết quả của ConsoleApp
       - name: Upload Artifact
