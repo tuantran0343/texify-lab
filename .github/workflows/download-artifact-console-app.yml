@@ -1,0 +1,62 @@
+name: Build Console App
+
+on:
+
+  workflow_call:
+    inputs:
+      download-path: 
+        type: string
+        required: true
+    outputs:
+      build-console-app-result:
+        description: "Message from download console result"
+        value: ${{ jobs.use-download-console.outputs.build-console-app-result }}
+
+jobs:
+  download-console-app:
+    runs-on: ubuntu-latest
+    outputs:
+      read_readme: ${{ steps.read_readme.outputs.readme_content }}    
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: texify-console-app-binary
+          path: ${{inputs.download-path}}
+
+      - name: Check file has been downloaded
+        run: |
+          ls -la ${{inputs.download-path}}
+          echo "✅ Download Successfully!"
+
+      - name: Read content of README.txt file
+        id: read_readme
+        run: |
+          echo "=== Content README.txt ==="
+          cat ${{ inputs.download-path }}/README.txt
+          
+          # Nếu muốn lưu nội dung vào output để dùng ở các step sau
+          README_CONTENT=$(cat ${{ inputs.download-path }}/README.txt)
+          echo "readme_content<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$README_CONTENT" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+        
+  
+  use-download-console:
+    needs: download-console-app
+    runs-on: ubuntu-latest
+    outputs:
+      build-console-app-result: ${{ steps.run-export.outputs.my_final_json }}
+    steps:
+      - name: Run use build console
+        id: run-export
+        run: |
+            RESULT="${{ needs.download-console-app.outputs.read_readme }}"
+
+            echo "=== Nội dung README.txt nhận được ==="
+            echo "$RESULT"
+            echo "====================================="
+
+            echo "my_final_json<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$RESULT" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"

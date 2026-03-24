@@ -6,6 +6,9 @@ on:
       build-console-app-result:
         description: "Message from build console result"
         value: ${{ jobs.use-build-console.outputs.build-console-app-result }}
+      download-path:
+        description: "Download path"
+        value: ./publish-folder
 
 jobs:
   build-console-app:
