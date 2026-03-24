@@ -58,6 +58,10 @@ jobs:
     steps:
       - run: echo "LABEL DATA => ${{ toJson(github.event.pull_request.labels.*.name) }}"
 
+  build-texify-console-app:
+    needs: build-and-test
+    uses: ./.github/workflows/build-console-app.yml
+
   publish-nuget-package:
     needs: build-and-test
     uses: ./.github/workflows/publish-package.yml
