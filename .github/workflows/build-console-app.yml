@@ -33,6 +33,12 @@ jobs:
       # Bước 3: Publish ra một thư mục riêng để chuẩn bị upload
       - name: Publish App
         run: dotnet publish ./TexifyLab/ConsoleApp/ConsoleApp.csproj -c Release -r win-x64 -o ./publish-folder
+
+      - name: Add extra files to publish folder
+        run: |
+          echo "This is a release note for version 1.0, và có thêm các data đã publish" > ./publish-folder/README.txt
+          echo "Build time: $(date)" >> ./publish-folder/README.txt
+          echo "Built on Ubuntu runner" > ./publish-folder/build-info.txt
         
       # Bước 4: Chỉ upload kết quả của ConsoleApp
       - name: Upload Artifact
