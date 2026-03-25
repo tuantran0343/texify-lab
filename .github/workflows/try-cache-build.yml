@@ -15,6 +15,12 @@ jobs:
         cache-name: dotnet-console-texify
     steps:
 
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: texify-console-app-binary
+          path: ${{ inputs.download-path }}
+
       - name: Set Cache Key
         id: cache-key
         run: |
@@ -33,39 +39,27 @@ jobs:
             key: ${{ steps.cache-key.outputs.key }}
             lookup-only: true
 
-      - name: Debug kết quả
+      - name: Debug cache hit or miss
         run: |
-            echo "Cache key chính xác tồn tại? → ${{ steps.cache-check.outputs.cache-hit }}"
-            echo "Nếu cache-hit = true → có data"
-            echo "Nếu cache-hit = false hoặc rỗng → không có key chính xác này"
+            echo "Cache value is '${{ steps.cache-check.outputs.cache-hit }}' "
         shell: bash
 
-      - uses: actions/cache@v3    
+      - uses: actions/cache@v3
         with:
             path: ${{ inputs.download-path }}
             key: ${{steps.cache-key.outputs.key}}
             restore-keys: |
-                ${{ runner.os }}-build-${{ env.cache-name }}-nemo
+                ${{ runner.os }}-build-${{ env.cache-name }}-nemo      
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: texify-console-app-binary
-          path: ${{ inputs.download-path }}
-
-      - name: Copy to folder publish-cloned
+      - name: Copy to folder cache-publish-app-published
         run: |
-          mkdir -p publish-cloned
+          mkdir -p cache-publish-app-published
           cp -r ${{ inputs.download-path }} cache-publish-app-published/
-          ls -la publish-cloned
+          ls -la cache-publish-app-published
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: texify-console-app-binary
-          path: ./publish-cloned
-
-      - name: Check file has been downloaded
-        run: |
-          ls -la ${{inputs.download-path}}
-          echo "✅ Download Successfully From Cache Run!"
+          name: texify-app-cached
+          path: ./cache-publish-app-published
+          retention-days: 1
