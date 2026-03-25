@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="ConsoleApp/ConsoleApp.csproj" Id="a4ffb83e-1dc7-4fe6-baaa-b0c6fd8d7fea" />
   <Project Path="TexifyLab.UnitTests/TexifyLab.UnitTests.csproj" />
   <Project Path="TexifyLab/TexifyLab.csproj" />
 </Solution>

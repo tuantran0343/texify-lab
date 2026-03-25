@@ -1,0 +1,62 @@
+name: Build Console App
+
+on:
+  workflow_call:
+    outputs:
+      build-console-app-result:
+        description: "Message from build console result"
+        value: ${{ jobs.use-build-console.outputs.build-console-app-result }}
+      download-path:
+        description: "Download path"
+        value: ./publish-folder
+
+jobs:
+  build-console-app:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Bước 1: Lấy code từ repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # Bước 2: Cài đặt .NET SDK
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      
+      # Bước 3: Khôi phục các package NuGet
+      - name: Restore dependencies
+        run: dotnet restore ./TexifyLab/ConsoleApp/ConsoleApp.csproj
+      
+      # Bước 4: Build project
+      - name: Build project
+        run: dotnet build ./TexifyLab/ConsoleApp/ConsoleApp.csproj --configuration Release --no-restore
+
+      # Bước 3: Publish ra một thư mục riêng để chuẩn bị upload
+      - name: Publish App
+        run: dotnet publish ./TexifyLab/ConsoleApp/ConsoleApp.csproj -c Release -r win-x64 -o ./publish-folder
+
+      - name: Add extra files to publish folder
+        run: |
+          echo "This is a release note for version 1.0, và có thêm các data đã publish" > ./publish-folder/README.txt
+          echo "Build time: $(date)" >> ./publish-folder/README.txt
+          echo "Built on Ubuntu runner" > ./publish-folder/build-info.txt
+        
+      # Bước 4: Chỉ upload kết quả của ConsoleApp
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: texify-console-app-binary
+          path: ./publish-folder
+          retention-days: 7
+  
+  use-build-console:
+    needs: build-console-app
+    runs-on: ubuntu-latest
+    outputs:
+      build-console-app-result: ${{ steps.run-export.outputs.my_final_json }}
+    steps:
+      - name: Run use build console
+        id: run-export
+        run: echo "my_final_json=$RESULT" >> "$GITHUB_OUTPUT"
