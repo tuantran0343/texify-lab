@@ -50,7 +50,7 @@ jobs:
       - name: Copy to folder publish-cloned
         run: |
           mkdir -p publish-cloned
-          cp -r ${{ inputs.download-path }}/. publish-cloned/
+          cp -r ${{ inputs.download-path }} cache-publish-app-published/
           ls -la publish-cloned
 
       - name: Download Artifact
