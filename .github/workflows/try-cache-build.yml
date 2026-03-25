@@ -11,24 +11,41 @@ jobs:
     
   try-cache-ci:
     runs-on: ubuntu-latest    
+    env:
+        cache-name: dotnet-console-texify
     steps:
 
       - name: Set Cache Key
-        env:
-            cache-name: dotnet-console-texify
         id: cache-key
         run: |
-            echo "key=${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(inputs.download-path, '/ConsoleApp.exe') }}" >> $GITHUB_OUTPUT
+            echo "key=${{ runner.os }}-build-${{ env.cache-name }}-nemo-${{ github.ref_name }}-${{ hashFiles(inputs.download-path, '/ConsoleApp.exe') }}" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Debug Cache Key
         run: | 
             echo "Cache key is: ${{ steps.cache-key.outputs.key }}"
 
-      - uses: actions/cache@v3        
+      - name: Check cache existence (lookup only)
+        id: cache-check
+        uses: actions/cache@v4
+        with:
+            path: ${{ inputs.download-path }}
+            key: ${{ steps.cache-key.outputs.key }}
+            lookup-only: true
+
+      - name: Debug kết quả
+        run: |
+            echo "Cache key chính xác tồn tại? → ${{ steps.cache-check.outputs.cache-hit }}"
+            echo "Nếu cache-hit = true → có data"
+            echo "Nếu cache-hit = false hoặc rỗng → không có key chính xác này"
+        shell: bash
+
+      - uses: actions/cache@v3    
         with:
             path: ${{ inputs.download-path }}
             key: ${{steps.cache-key.outputs.key}}
+            restore-keys: |
+                ${{ runner.os }}-build-${{ env.cache-name }}-nemo
 
       - name: Copy to folder publish-cloned
         run: |
