@@ -1,0 +1,65 @@
+name: Try cache CI
+on:
+
+  workflow_call:
+    inputs:
+      download-path:
+        type: string
+        required: true
+
+jobs:
+    
+  try-cache-ci:
+    runs-on: ubuntu-latest    
+    env:
+        cache-name: dotnet-console-texify
+    steps:
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: texify-console-app-binary
+          path: ${{ inputs.download-path }}
+
+      - name: Set Cache Key
+        id: cache-key
+        run: |
+            echo "key=${{ runner.os }}-build-${{ env.cache-name }}-nemo-${{ github.ref_name }}-${{ hashFiles(inputs.download-path, '/ConsoleApp.exe') }}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Debug Cache Key
+        run: | 
+            echo "Cache key is: ${{ steps.cache-key.outputs.key }}"
+
+      - name: Check cache existence (lookup only)
+        id: cache-check
+        uses: actions/cache@v4
+        with:
+            path: ${{ inputs.download-path }}
+            key: ${{ steps.cache-key.outputs.key }}
+            lookup-only: true
+
+      - name: Debug cache hit or miss
+        run: |
+            echo "Cache value is '${{ steps.cache-check.outputs.cache-hit }}' "
+        shell: bash
+
+      - uses: actions/cache@v3
+        with:
+            path: ${{ inputs.download-path }}
+            key: ${{steps.cache-key.outputs.key}}
+            restore-keys: |
+                ${{ runner.os }}-build-${{ env.cache-name }}-nemo      
+
+      - name: Copy to folder cache-publish-app-published
+        run: |
+          mkdir -p cache-publish-app-published
+          cp -r ${{ inputs.download-path }} cache-publish-app-published/
+          ls -la cache-publish-app-published
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: texify-app-cached
+          path: ./cache-publish-app-published
+          retention-days: 1
