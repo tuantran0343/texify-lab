@@ -47,6 +47,12 @@ jobs:
             restore-keys: |
                 ${{ runner.os }}-build-${{ env.cache-name }}-nemo
 
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: download-console-app
+          path: ${{ inputs.download-path }}
+
       - name: Copy to folder publish-cloned
         run: |
           mkdir -p publish-cloned
