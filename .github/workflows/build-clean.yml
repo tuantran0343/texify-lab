@@ -79,3 +79,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Result from PUBLISH_PACKAGE JOB => ${{ toJson(needs.publish-nuget-package.outputs.publish_result) }}"
+
+  use-cache-texify-console-app:
+    needs: build-texify-console-app
+    uses: ./.github/workflows/try-cache-build.yml
+    with:
+      download-path: ${{needs.build-texify-console-app.outputs.download-path}}

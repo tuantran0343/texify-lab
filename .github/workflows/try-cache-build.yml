@@ -1,0 +1,48 @@
+name: Try cache CI
+on:
+
+  workflow_call:
+    inputs:
+      download-path:
+        type: string
+        required: true
+
+jobs:
+    
+  try-cache-ci:
+    runs-on: ubuntu-latest    
+    steps:
+
+      - name: Set Cache Key
+        env:
+            cache-name: dotnet-console-texify
+        id: cache-key
+        run: |
+            echo "key=${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(inputs.download-path, '/ConsoleApp.exe') }}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Debug Cache Key
+        run: | 
+            echo "Cache key is: ${{ steps.cache-key.outputs.key }}"
+
+      - uses: actions/cache@v3        
+        with:
+            path: ${{ inputs.download-path }}
+            key: ${{steps.cache-key.outputs.key}}
+
+      - name: Copy to folder publish-cloned
+        run: |
+          mkdir -p publish-cloned
+          cp -r ${{ inputs.download-path }}/. publish-cloned/
+          ls -la publish-cloned
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: texify-console-app-binary
+          path: ./publish-cloned
+
+      - name: Check file has been downloaded
+        run: |
+          ls -la ${{inputs.download-path}}
+          echo "✅ Download Successfully From Cache Run!"
