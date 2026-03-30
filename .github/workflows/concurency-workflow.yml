@@ -28,7 +28,7 @@ jobs:
 
   run-matrix:
     needs: [build]
-    if: failure()
+    if: success()
     runs-on: ubuntu-latest
     strategy:
         matrix:
