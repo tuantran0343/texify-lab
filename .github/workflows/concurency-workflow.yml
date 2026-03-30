@@ -25,3 +25,17 @@ jobs:
             sleep 120
             
             echo "CONCURRENCY WORKFLOW HAS BEEN RUNNED ref = [${{ github.ref }}] , sha = [${{ github.sha }}]"
+
+  run-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+            prod: [prod1, prod2]
+            level: [dev, stage, prod]
+
+    steps:
+        - name: Build matrix for Apps
+          run: |
+            echo 'Build system for Prod = [${{ matrix.prod }}] , Level = [${{ matrix.level }}]'
+
+        
