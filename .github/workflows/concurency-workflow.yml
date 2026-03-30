@@ -1,0 +1,22 @@
+name: Concurrency Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    concurrency:
+        group: ${{ github.ref }}
+        cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run console
+        run: |
+            echo CONCURRENCY WORKFLOW HAS BEEN RUNNED
