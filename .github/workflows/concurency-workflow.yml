@@ -20,7 +20,7 @@ jobs:
       - name: Run console
         run: |
             echo "Workflow started for ref = [${{ github.ref }}] , sha = [${{ github.sha }}]..."
-            echo "Waiting for 2 minutes (120 seconds) to simulate a long task..."
+            echo "Waiting Stage_1 for 2 minutes (120 seconds) to simulate a long task..."
             
             sleep 120
             
