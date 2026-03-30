@@ -27,11 +27,14 @@ jobs:
             echo "CONCURRENCY WORKFLOW HAS BEEN RUNNED ref = [${{ github.ref }}] , sha = [${{ github.sha }}]"
 
   run-matrix:
+    needs: [build]
+    if: failure()
     runs-on: ubuntu-latest
     strategy:
         matrix:
             prod: [prod1, prod2]
             level: [dev, stage, prod]
+    continue-on-error: true #nếu 1 item trong combination failed thì các item khác vẫn chạy
 
     steps:
         - name: Build matrix for Apps
