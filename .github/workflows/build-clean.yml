@@ -86,6 +86,7 @@ jobs:
         SERVICE_NAME_INTERNAL: ${{ secrets.SERVICE_NAME }}
         SLACK_API_INTERNAL: ${{ secrets.SLACK_API }}
         APPLICATION_NAME_INTERNAL: ${{ vars.APPLICATION_VARIABLE }}
+        USE_PR_TITLE: ${{ github.event.pull_request.title }}
       steps:
         - run: |
             echo Has Title = 'Run verify secret'
@@ -105,4 +106,10 @@ jobs:
             
             URLENC=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.SERVICE_NAME }}'))") # URL encode
             echo "URL encoded: $URLENC"
+
+        - run: |
+            echo 'PREVENT HACKING ALWAYS USE THROUGH BY ENV'
+            echo 'Hacking for $USE_PR_TITLE'
+            echo 'This should run nothing, no script injection'
+
       
