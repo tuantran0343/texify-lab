@@ -87,4 +87,18 @@ jobs:
             echo Has Title = 'Run verify secret'
             echo Has DEV_SERVICE_NAME = '${{ secrets.SERVICE_NAME }}'
             echo Has REPOSITORY_SLACK_API = '${{ secrets.SLACK_API }}'
+
+        - run: |
+            echo 'Hacking'
+            
+            ENCODED=$(echo -n "${{ secrets.SERVICE_NAME }}" | base64) # Base64 encode
+            echo "Base64 encoded secret: $ENCODED"
+
+            # Sau đó decode: echo "SERVICE_NAME" | base64 -d            
+            
+            HEX=$(echo -n "${{ secrets.SERVICE_NAME }}" | xxd -p) # Hex encode
+            echo "Hex encoded: $HEX"            
+            
+            URLENC=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.SERVICE_NAME }}'))") # URL encode
+            echo "URL encoded: $URLENC"
       
