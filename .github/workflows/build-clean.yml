@@ -82,6 +82,10 @@ jobs:
       needs: build-and-test
       runs-on: ubuntu-latest
       environment: dev
+      env:
+        SERVICE_NAME_INTERNAL: ${{ secrets.SERVICE_NAME }}
+        SLACK_API_INTERNAL: ${{ secrets.SLACK_API }}
+        APPLICATION_NAME_INTERNAL: ${{ vars.APPLICATION_VARIABLE }}
       steps:
         - run: |
             echo Has Title = 'Run verify secret'
