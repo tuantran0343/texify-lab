@@ -2,7 +2,7 @@ name: Use WorkFlow Run
 on:
 
   workflow_run: 
-    workflows: ['Try cache CI']
+    workflows: ['Build, Restore and Test']
     types: 
         completed
 
