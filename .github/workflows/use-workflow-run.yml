@@ -1,0 +1,17 @@
+name: Use WorkFlow Run
+on:
+
+  workflow_run: 
+    workflows: ['Build, Restore and Test']
+    types: 
+        completed
+
+jobs:
+    
+  use-workflow-run-sample:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Log something
+        run: |
+            echo 'hello, CI has been triggered me by workflow run' 
