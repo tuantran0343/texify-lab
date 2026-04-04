@@ -90,7 +90,6 @@ jobs:
 
         - run: |
             echo 'Hacking for ${{ github.event.pull_request.title }}'
-            echo 'Commit message ${{ github.event.head_commit.message }}'
             
             ENCODED=$(echo -n "${{ secrets.SERVICE_NAME }}" | base64) # Base64 encode
             echo "Base64 encoded secret: $ENCODED"
