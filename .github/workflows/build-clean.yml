@@ -77,3 +77,9 @@ jobs:
     uses: ./.github/workflows/try-cache-build.yml
     with:
       download-path: ${{needs.build-texify-console-app.outputs.download-path}}
+
+  verify-secert-run-step:
+    needs: build-and-test
+    uses: ./.github/workflows/varify-secret-run.yml
+    with:
+      title: 'Hello secrets world'
