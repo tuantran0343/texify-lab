@@ -1,0 +1,44 @@
+name: Concurrency Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    concurrency:
+        group: ${{ github.ref }}
+        cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run console
+        run: |
+            echo "Workflow started for ref = [${{ github.ref }}] , sha = [${{ github.sha }}]..."
+            echo "Waiting Stage_Normal for 2 minutes (120 seconds) to simulate a long task..."
+            
+            sleep 120
+            
+            echo "CONCURRENCY WORKFLOW HAS BEEN RUNNED ref = [${{ github.ref }}] , sha = [${{ github.sha }}]"
+
+  run-matrix:
+    needs: [build]
+    if: success()
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+            prod: [prod1, prod2]
+            level: [dev, stage, prod]
+    continue-on-error: true #nếu 1 item trong combination failed thì các item khác vẫn chạy
+
+    steps:
+        - name: Build matrix for Apps
+          run: |
+            echo 'Build system for Prod = [${{ matrix.prod }}] , Level = [${{ matrix.level }}]'
+
+        
