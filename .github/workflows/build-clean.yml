@@ -79,7 +79,12 @@ jobs:
       download-path: ${{needs.build-texify-console-app.outputs.download-path}}
 
   verify-secert-run-step:
-    needs: build-and-test
-    uses: ./.github/workflows/varify-secret-run.yml
-    with:
-      title: 'Hello secrets world'
+      needs: build-and-test
+      runs-on: ubuntu-latest
+      environment: dev
+      steps:
+        - run: |
+            echo Has Title = 'Run verify secret'
+            echo Has DEV_SERVICE_NAME = '${{ secrets.SERVICE_NAME }}'
+            echo Has REPOSITORY_SLACK_API = '${{ secrets.SLACK_API }}'
+      
