@@ -109,7 +109,7 @@ jobs:
 
         - run: |
             echo 'PREVENT HACKING ALWAYS USE THROUGH BY ENV'
-            echo 'Hacking for $USE_PR_TITLE'
+            echo "Hacking for $USE_PR_TITLE"
             echo 'This should run nothing, no script injection'
 
       
