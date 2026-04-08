@@ -48,7 +48,12 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
-      - run: echo "LABEL DATA => ${{ toJson(github.event.pull_request.labels.*.name) }}"
+      - run: | 
+          echo "LABEL DATA => ${{ toJson(github.event.pull_request.labels.*.name) }}"
+          echo "::debug::This is a debug message"
+          echo "::warning::This is a warning message"
+          echo "::notice::This is a notice message"
+          echo "::error::This is an error message"
 
   build-texify-console-app:
     needs: build-and-test
