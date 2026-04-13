@@ -48,7 +48,21 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
-      - run: echo "LABEL DATA => ${{ toJson(github.event.pull_request.labels.*.name) }}"
+      - run: | 
+          echo "LABEL DATA => ${{ toJson(github.event.pull_request.labels.*.name) }}"
+          echo "::debug::This is a debug message"
+          echo "::warning::This is a warning message"
+          echo "::notice::This is a notice message"
+          echo "::error::This is an error message"
+
+          echo "::group::Extended info - grouping"
+          echo "Info line 1"
+          echo "Info line 2"
+          echo "Info line 3"
+          echo "::endgroup::"
+
+      - run: echo "::add-mask::$USER_ID"
+      - run: echo "Masking for USER_ID is $USER_ID"
 
   build-texify-console-app:
     needs: build-and-test
