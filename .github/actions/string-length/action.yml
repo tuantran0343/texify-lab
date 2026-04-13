@@ -1,0 +1,22 @@
+name: 'String Length'
+description: 'Calculate the length of an input string'
+
+inputs:
+  input-string:
+    description: 'The string to measure'
+    required: true
+
+outputs:
+  length:
+    description: 'The length of the input string'
+    value: ${{ steps.calculate.outputs.length }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: calculate
+      shell: bash
+      run: |
+        input="${{ inputs.input-string }}"
+        length=${#input}
+        echo "length=$length" >> $GITHUB_OUTPUT

@@ -91,3 +91,17 @@ jobs:
     uses: ./.github/workflows/try-cache-build.yml
     with:
       download-path: ${{needs.build-texify-console-app.outputs.download-path}}
+
+  test-string-length:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Get string length
+        id: string-check
+        uses: ./.github/actions/string-length
+        with:
+          input-string: "Hello World"
+      
+      - name: Display result
+        run: echo "String length is ${{ steps.string-check.outputs.length }}"
