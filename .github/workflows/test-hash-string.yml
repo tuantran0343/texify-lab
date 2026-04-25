@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: tuantran0343/string-fingerprint@1.0.1
+      - uses: tuantran0343/string-fingerprint@1.0.2
         id: test_hash
         with:
           value: "Billy"
