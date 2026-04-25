@@ -98,4 +98,8 @@ jobs:
     with:
       a: '2'
       b: '8'
+
+  string-fingerprint:
+    needs: build-and-test
+    uses: ./.github/workflows/test-hash-string.yml
       
