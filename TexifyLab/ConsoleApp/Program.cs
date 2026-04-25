@@ -10,19 +10,7 @@ if (argsSample.Length >= 3)
     {
         double result = a * b;
 
-        // In kết quả để sử dụng trong GitHub Actions
         Console.WriteLine($"result={result}");
-
-        // Ghi vào GitHub output (dùng cho GitHub Actions)
-        // Cách 1: Ghi trực tiếp vào file GITHUB_OUTPUT
-        string githubOutput = Environment.GetEnvironmentVariable("GITHUB_OUTPUT");
-        if (!string.IsNullOrEmpty(githubOutput))
-        {
-            File.AppendAllText(githubOutput, $"multiplication_result={result}{Environment.NewLine}");
-        }
-
-        // Cách 2: In dạng đặc biệt GitHub Actions có thể đọc được
-        Console.WriteLine($"::set-output name=multiplication_result::{result}");
     }
     else
     {

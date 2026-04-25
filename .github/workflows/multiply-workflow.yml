@@ -25,10 +25,10 @@ jobs:
       - name: Run multiplication
         id: multiply
         run: |
-          docker run --rm \
-            -v $GITHUB_OUTPUT:$GITHUB_OUTPUT \
-            -e GITHUB_OUTPUT=$GITHUB_OUTPUT \
-            nhan-2-so ${{ inputs.a }} ${{ inputs.b }}
+          docker run --rm nhan-2-so ${{ inputs.a }} ${{ inputs.b }} \
+            | grep "^result=" \
+            | sed 's/^result=/multiplication_result=/' \
+            >> $GITHUB_OUTPUT
 
       - name: Show result
         run: echo "Result = ${{ steps.multiply.outputs.multiplication_result }}"
