@@ -26,3 +26,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ConsoleApp.dll"]
+
+
+
+# docker run -it --rm -p 8080:8080 --name wiremock -v wire-mock:/home/wiremock sha256:df6ee983de9dcf18f42d5b5e7a91b2758c054f759e489f9722b4f138346cde1a

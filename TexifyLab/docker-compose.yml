@@ -1,0 +1,26 @@
+services:
+  wiremock:
+    image: wiremock/wiremock:latest
+    container_name: wiremock
+    ports:
+      - "9090:8080"
+    volumes:
+      - ./wire-mock:/home/wiremock
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/__admin/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  consoleapp:
+    image: ${DOCKER_REGISTRY-}consoleapp
+    container_name: consoleapp
+    build:
+      context: .
+      dockerfile: ConsoleApp/Dockerfile
+    depends_on:
+      wiremock:
+        condition: service_healthy
+    environment:
+      - WIREMOCK_BASE_URL=http://wiremock:8080
