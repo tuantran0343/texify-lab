@@ -91,3 +91,11 @@ jobs:
     uses: ./.github/workflows/try-cache-build.yml
     with:
       download-path: ${{needs.build-texify-console-app.outputs.download-path}}
+
+  mutiply-2-number-by-docker-action:
+    needs: build-and-test
+    uses: ./.github/workflows/multiply-workflow.yml
+    with:
+      a: '2'
+      b: '8'
+      

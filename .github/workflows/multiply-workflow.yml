@@ -1,0 +1,34 @@
+name: Multiply Numbers
+
+on:
+  workflow_call:
+    inputs:
+      a:
+        type: string
+        description: "First number"
+        required: true
+      b:
+        type: string
+        description: "Second number"
+        required: true
+
+jobs:
+  multiply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t nhan-2-so -f TexifyLab/ConsoleApp/Dockerfile TexifyLab/
+
+      - name: Run multiplication
+        id: multiply
+        run: |
+          docker run --rm \
+            -v $GITHUB_OUTPUT:$GITHUB_OUTPUT \
+            -e GITHUB_OUTPUT=$GITHUB_OUTPUT \
+            nhan-2-so ${{ inputs.a }} ${{ inputs.b }}
+
+      - name: Show result
+        run: echo "Result = ${{ steps.multiply.outputs.multiplication_result }}"
