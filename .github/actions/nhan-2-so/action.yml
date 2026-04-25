@@ -1,0 +1,18 @@
+name: 'Multiply Numbers'
+description: 'Multiply two numbers and output result'
+inputs:
+  a:
+    description: 'First number'
+    required: true
+  b:
+    description: 'Second number'
+    required: true
+outputs:
+  result:
+    description: 'Multiplication result'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.a }}
+    - ${{ inputs.b }}
