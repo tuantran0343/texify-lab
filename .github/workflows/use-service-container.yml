@@ -1,0 +1,33 @@
+name: Try Service Docker
+on:
+
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      hello-api:
+        image: nmatsui/hello-world-api@sha256:c2b606f696f63720a96825bf29c516ff796d9f4f2426673bdc0c5cbaccab649a
+        ports:
+          - 8080:8080
+        options: >-
+          --health-cmd "curl -f http://localhost:8080/health || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+      - name: Wait for API to be ready
+        run: sleep 5
+      
+      - name: Test API endpoint
+        run: |
+          RESPONSE=$(curl -s http://localhost:8080/)
+          echo "api_response=$RESPONSE" >> $GITHUB_OUTPUT
+        id: api_test
+      
+      - name: Display API response
+        run: |
+          echo "✅ API Response: ${{ steps.api_test.outputs.api_response }}"

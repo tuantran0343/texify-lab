@@ -91,3 +91,6 @@ jobs:
     uses: ./.github/workflows/try-cache-build.yml
     with:
       download-path: ${{needs.build-texify-console-app.outputs.download-path}}
+
+  try-service-container:
+    uses: ./.github/workflows/use-service-container.yml
