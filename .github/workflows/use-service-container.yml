@@ -12,11 +12,11 @@ jobs:
         image: nmatsui/hello-world-api@sha256:c2b606f696f63720a96825bf29c516ff796d9f4f2426673bdc0c5cbaccab649a
         ports:
           - 8080:8080
-        options: >-
-          --health-cmd "curl -f http://localhost:8080/ || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        # options: >-
+        #   --health-cmd "curl -f http://localhost:8080/ || exit 1"
+        #   --health-interval 10s
+        #   --health-timeout 5s
+        #   --health-retries 5
     
     steps:
       - name: Wait for API to be ready
