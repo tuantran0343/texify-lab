@@ -1,0 +1,33 @@
+name: report-timestamp
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+    inputs:
+      report_name_input:
+        description: "Tên report"
+        required: false
+        default: "Q2-2026-Sales-Summary-Input"
+
+env:
+  report_name_env: 'Q2-2026-Sales-Summary'
+
+jobs:
+  print-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: capture_datetime
+        id: capture_datetime
+        run: |
+          DATETIME=$(date '+%Y-%m-%d %H:%M:%S')
+          echo "datetime=$DATETIME" >> $GITHUB_OUTPUT
+          echo "Datetime: $DATETIME"
+
+      - name: print_output
+        run: |
+          echo "Data input: ${{ inputs.report_name_input }}"
+          echo "[${{ steps.capture_datetime.outputs.datetime }}]  report=\"${{ env.report_name_env }}\""
