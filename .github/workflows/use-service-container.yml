@@ -11,7 +11,7 @@ jobs:
       hello-api:
         image: nmatsui/hello-world-api@sha256:c2b606f696f63720a96825bf29c516ff796d9f4f2426673bdc0c5cbaccab649a
         ports:
-          - 3000:3000
+          - 8085:3000
         # options: >-
         #   --health-cmd "curl -f http://localhost:3000/ || exit 1"
         #   --health-interval 10s
@@ -24,7 +24,7 @@ jobs:
       
       - name: Test API endpoint
         run: |
-          RESPONSE=$(curl -s http://localhost:3000/)
+          RESPONSE=$(curl -s http://localhost:8085/)
           echo "api_response=$RESPONSE" >> $GITHUB_OUTPUT
         id: api_test
       
