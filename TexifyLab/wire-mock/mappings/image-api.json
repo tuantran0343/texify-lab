@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/users"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": [
+      {
+        "firstName": "John",
+        "lastName": "Doe",
+        "userName": "johndoe89"
+      },
+      {
+        "firstName": "Jane",
+        "lastName": "Smith",
+        "userName": "janesmith_dev"
+      }
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
